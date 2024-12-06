@@ -1,15 +1,15 @@
 <template>
   <el-dialog
-    :title="!dataForm.buyDemandId ? '新增' : '修改'"
     :close-on-click-modal="false"
+    :title="!dataForm.buyDemandId ? '新增' : '修改'"
     :visible.sync="visible"
   >
     <el-form
+      ref="dataForm"
       :model="dataForm"
       :rules="dataRule"
-      ref="dataForm"
-      @keyup.enter.native="dataFormSubmit()"
       label-width="120px"
+      @keyup.enter.native="dataFormSubmit()"
     >
       <el-form-item label="采购品id" prop="warestockId">
         <el-input v-model="dataForm.warestockId" placeholder="采购品id"></el-input>
@@ -41,80 +41,80 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       visible: false,
       wareList: [],
       dataForm: {
         buyDemandId: 0,
-        buyListId: "",
-        warestockId: "",
-        buyNum: "",
-        valueSelect: "",
+        buyListId: '',
+        warestockId: '',
+        buyNum: '',
+        valueSelect: '',
         origin: 0,
         status: 0
       },
       dataRule: {
         warestockId: [
-          { required: true, message: "采购商品id不能为空", trigger: "blur" }
+          {required: true, message: '采购商品id不能为空', trigger: 'blur'}
         ],
         buyNum: [
-          { required: true, message: "采购数量不能为空", trigger: "blur" }
+          {required: true, message: '采购数量不能为空', trigger: 'blur'}
         ],
-        wareId: [{ required: true, message: "仓库id不能为空", trigger: "blur" }]
+        wareId: [{required: true, message: '仓库id不能为空', trigger: 'blur'}]
       }
-    };
+    }
   },
-  created(){
-    this.getWares();
+  created () {
+    this.getWares()
   },
   methods: {
-    getWares() {
+    getWares () {
       this.$http({
-        url: this.$http.adornUrl("/ware/wareinfo/list"),
-        method: "get",
+        url: this.$http.adornUrl('/ware/wareinfo/list'),
+        method: 'get',
         params: this.$http.adornParams({
           page: 1,
           limit: 500
         })
-      }).then(({ data }) => {
-        this.wareList = data.page.list;
-      });
+      }).then(({data}) => {
+        this.wareList = data.page.list
+      })
     },
-    init(buyDemandId) {
-      this.dataForm.buyDemandId = buyDemandId || 0;
-      this.visible = true;
+    init (buyDemandId) {
+      this.dataForm.buyDemandId = buyDemandId || 0
+      this.visible = true
       this.$nextTick(() => {
-        this.$refs["dataForm"].resetFields();
+        this.$refs['dataForm'].resetFields()
         if (this.dataForm.buyDemandId) {
           this.$http({
             url: this.$http.adornUrl(
               `/purchase/buydemand/info/${this.dataForm.buyDemandId}`
             ),
-            method: "get",
+            method: 'get',
             params: this.$http.adornParams()
-          }).then(({ data }) => {
+          }).then(({data}) => {
             if (data && data.code === 0) {
-              this.dataForm.buyListId = data.data.buyListId;
-              this.dataForm.warestockId = data.data.warestockId;
-              this.dataForm.buyNum = data.data.buyNum;
-              this.dataForm.origin = data.data.origin;
-              this.dataForm.valueSelect = data.data.valueSelect;
-              this.dataForm.status = data.data.status;
+              this.dataForm.buyListId = data.data.buyListId
+              this.dataForm.warestockId = data.data.warestockId
+              this.dataForm.buyNum = data.data.buyNum
+              this.dataForm.origin = data.data.origin
+              this.dataForm.valueSelect = data.data.valueSelect
+              this.dataForm.status = data.data.status
             }
-          });
+          })
         }
-      });
+      })
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs["dataForm"].validate(valid => {
+    dataFormSubmit () {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.$http({
             url: this.$http.adornUrl(
-              `/purchase/buydemand/${!this.dataForm.buyDemandId ? "save" : "update"}`
+              `/purchase/buydemand/${!this.dataForm.buyDemandId ? 'save' : 'update'}`
             ),
-            method: "post",
+            method: 'post',
             data: this.$http.adornData({
               buyDemandId: this.dataForm.buyDemandId || undefined,
               buyListId: this.dataForm.buyListId,
@@ -124,24 +124,24 @@ export default {
               valueSelect: this.dataForm.valueSelect,
               status: this.dataForm.status
             })
-          }).then(({ data }) => {
+          }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
-                message: "操作成功",
-                type: "success",
+                message: '操作成功',
+                type: 'success',
                 duration: 1500,
                 onClose: () => {
-                  this.visible = false;
-                  this.$emit("refreshDataList");
+                  this.visible = false
+                  this.$emit('refreshDataList')
                 }
-              });
+              })
             } else {
-              this.$message.error(data.msg);
+              this.$message.error(data.msg)
             }
-          });
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>

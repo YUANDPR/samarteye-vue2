@@ -1,16 +1,16 @@
 <template>
   <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
+    :title="!dataForm.id ? '新增' : '修改'"
     :visible.sync="visible"
     @closed="dialogClose"
   >
     <el-form
+      ref="dataForm"
       :model="dataForm"
       :rules="dataRule"
-      ref="dataForm"
-      @keyup.enter.native="dataFormSubmit()"
       label-width="120px"
+      @keyup.enter.native="dataFormSubmit()"
     >
       <el-form-item label="货架名" prop="shelfName">
         <el-input v-model="dataForm.shelfName" placeholder="货架名"></el-input>
@@ -40,120 +40,121 @@
 
 <script>
 import CategoryCascader from '../common/material/category-cascader'
+
 export default {
-  data() {
+  data () {
     return {
-      props:{
-        value:"catId",
-        label:"name",
-        children:"children"
+      props: {
+        value: 'catId',
+        label: 'name',
+        children: 'children'
       },
       visible: false,
       categorys: [],
       warelocationPath: [],
       dataForm: {
         shelfId: 0,
-        shelfName: "",
-        sort: "",
-        descript: "",
-        icon: "",
+        shelfName: '',
+        sort: '',
+        descript: '',
+        icon: '',
         wlId: 0
       },
       dataRule: {
         shelfName: [
-          { required: true, message: "货架名不能为空", trigger: "blur" }
+          {required: true, message: '货架名不能为空', trigger: 'blur'}
         ],
-        sort: [{ required: false, message: "不能为空", trigger: "blur" }],
+        sort: [{required: false, message: '不能为空', trigger: 'blur'}],
         descript: [
-          { required: true, message: "描述不能为空", trigger: "blur" }
+          {required: true, message: '描述不能为空', trigger: 'blur'}
         ],
-        icon: [{ required: false, message: "图标不能为空", trigger: "blur" }],
+        icon: [{required: false, message: '图标不能为空', trigger: 'blur'}],
         wlId: [
-          { required: true, message: "所属分区id不能为空", trigger: "blur" }
+          {required: true, message: '所属分区id不能为空', trigger: 'blur'}
         ]
       }
-    };
+    }
   },
-  components:{CategoryCascader},
-  
+  components: {CategoryCascader},
+
   methods: {
-    dialogClose(){
-      this.warelocationPath = [];
+    dialogClose () {
+      this.warelocationPath = []
     },
-    getCategorys(){
+    getCategorys () {
       this.$http({
-        url: this.$http.adornUrl("/material/warelocation/list/tree"),
-        method: "get"
-      }).then(({ data }) => {
-        this.categorys = data.data;
-      });
+        url: this.$http.adornUrl('/material/warelocation/list/tree'),
+        method: 'get'
+      }).then(({data}) => {
+        this.categorys = data.data
+      })
     },
-    init(id) {
-      this.dataForm.shelfId = id || 0;
-      this.visible = true;
+    init (id) {
+      this.dataForm.shelfId = id || 0
+      this.visible = true
       this.$nextTick(() => {
-        this.$refs["dataForm"].resetFields();
+        this.$refs['dataForm'].resetFields()
         if (this.dataForm.shelfId) {
           this.$http({
             url: this.$http.adornUrl(
               `/material/shelf/info/${this.dataForm.shelfId}`
             ),
-            method: "get",
+            method: 'get',
             params: this.$http.adornParams()
-          }).then(({ data }) => {
+          }).then(({data}) => {
             if (data && data.code === 0) {
-              this.dataForm.shelfName = data.data.shelfName;
-              this.dataForm.sort = data.data.sort;
-              this.dataForm.descript = data.data.descript;
-              this.dataForm.icon = data.data.icon;
-              this.dataForm.wlId = data.data.wlId;
+              this.dataForm.shelfName = data.data.shelfName
+              this.dataForm.sort = data.data.sort
+              this.dataForm.descript = data.data.descript
+              this.dataForm.icon = data.data.icon
+              this.dataForm.wlId = data.data.wlId
               //查出wlId的完整路径
-              this.warelocationPath =  data.data.warelocationPath;
+              this.warelocationPath = data.data.warelocationPath
             }
-          });
+          })
         }
-      });
+      })
     },
     // 表单提交
-    dataFormSubmit() {
-      this.$refs["dataForm"].validate(valid => {
+    dataFormSubmit () {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.$http({
             url: this.$http.adornUrl(
               `/material/shelf/${
-                !this.dataForm.shelfId ? "save" : "update"
+                !this.dataForm.shelfId ? 'save' : 'update'
               }`
             ),
-            method: "post",
+            method: 'post',
             data: this.$http.adornData({
               shelfId: this.dataForm.shelfId || undefined,
               shelfName: this.dataForm.shelfName,
               sort: this.dataForm.sort,
               descript: this.dataForm.descript,
               icon: this.dataForm.icon,
-              wlId: this.warelocationPath[this.warelocationPath.length-1]
+              wlId: this.warelocationPath[this.warelocationPath.length - 1]
             })
-          }).then(({ data }) => {
+          }).then(({data}) => {
             if (data && data.code === 0) {
               this.$message({
-                message: "操作成功",
-                type: "success",
+                message: '操作成功',
+                type: 'success',
                 duration: 1500,
                 onClose: () => {
-                  this.visible = false;
-                  this.$emit("refreshDataList");
+                  this.visible = false
+                  this.$emit('refreshDataList')
                 }
-              });
+              })
             } else {
-              this.$message.error(data.msg);
+              this.$message.error(data.msg)
             }
-          });
+          })
         }
-      });
+      })
     }
   },
-  created(){
-    this.getCategorys();
+  created () {
+    this.getCategorys()
   }
-};
+}
 </script>

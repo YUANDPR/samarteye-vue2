@@ -10,14 +10,14 @@
             <brand-select style="width:160px"></brand-select>
           </el-form-item>
           <el-form-item label="状态">
-            <el-select style="width:160px" v-model="dataForm.status" clearable>
-              <el-option label="新入库" :value="0"></el-option>
-              <el-option label="已上架" :value="1"></el-option>
-              <el-option label="已出库" :value="2"></el-option>
+            <el-select v-model="dataForm.status" clearable style="width:160px">
+              <el-option :value="0" label="新入库"></el-option>
+              <el-option :value="1" label="已上架"></el-option>
+              <el-option :value="2" label="已出库"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="检索">
-            <el-input style="width:160px" v-model="dataForm.key" clearable></el-input>
+            <el-input v-model="dataForm.key" clearable style="width:160px"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="searchSpuInfo">查询</el-button>
@@ -34,28 +34,29 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import CategoryCascader from "../common/category-cascader";
-import BrandSelect from "../common/supplier-select";
-import Spuinfo from "./stockinfo";
+import CategoryCascader from '../common/category-cascader'
+import BrandSelect from '../common/supplier-select'
+import Spuinfo from './stockinfo'
+
 export default {
   //import引入的组件需要注入到对象中才能使用
-  components: { CategoryCascader, Spuinfo, BrandSelect },
+  components: {CategoryCascader, Spuinfo, BrandSelect},
   props: {},
-  data() {
+  data () {
     //这里存放数据
     return {
       catId: 0,
       catelogPath: [],
       dataForm: {
-        status: "",
-        key: "",
+        status: '',
+        key: '',
         brandId: 0,
         catelogId: 0
       },
       catPathSub: null,
       brandIdSub: null
 
-    };
+    }
   },
   //计算属性 类似于data概念
   computed: {},
@@ -63,33 +64,40 @@ export default {
   watch: {},
   //方法集合
   methods: {
-    searchSpuInfo() {
-      console.log("搜索条件", this.dataForm);
-      this.PubSub.publish("dataForm",this.dataForm);
+    searchSpuInfo () {
+      console.log('搜索条件', this.dataForm)
+      this.PubSub.publish('dataForm', this.dataForm)
     }
   },
   //生命周期 - 创建完成（可以访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    this.catPathSub = PubSub.subscribe("catPath", (msg, val) => {
-      this.dataForm.catelogId = val[val.length-1];
-    });
-    this.brandIdSub = PubSub.subscribe("brandId", (msg, val) => {
-      this.dataForm.brandId = val;
-    });
+  created () {
   },
-  beforeCreate() {}, //生命周期 - 创建之前
-  beforeMount() {}, //生命周期 - 挂载之前
-  beforeUpdate() {}, //生命周期 - 更新之前
-  updated() {}, //生命周期 - 更新之后
-  beforeDestroy() {
-     PubSub.unsubscribe(this.catPathSub); 
-     PubSub.unsubscribe(this.brandIdSub); 
+  //生命周期 - 挂载完成（可以访问DOM元素）
+  mounted () {
+    this.catPathSub = PubSub.subscribe('catPath', (msg, val) => {
+      this.dataForm.catelogId = val[val.length - 1]
+    })
+    this.brandIdSub = PubSub.subscribe('brandId', (msg, val) => {
+      this.dataForm.brandId = val
+    })
+  },
+  beforeCreate () {
+  }, //生命周期 - 创建之前
+  beforeMount () {
+  }, //生命周期 - 挂载之前
+  beforeUpdate () {
+  }, //生命周期 - 更新之前
+  updated () {
+  }, //生命周期 - 更新之后
+  beforeDestroy () {
+    PubSub.unsubscribe(this.catPathSub)
+    PubSub.unsubscribe(this.brandIdSub)
   }, //生命周期 - 销毁之前
-  destroyed() {}, //生命周期 - 销毁完成
-  activated() {} //如果页面有keep-alive缓存功能，这个函数会触发
-};
+  destroyed () {
+  }, //生命周期 - 销毁完成
+  activated () {
+  } //如果页面有keep-alive缓存功能，这个函数会触发
+}
 </script>
 <style scoped>
 </style>

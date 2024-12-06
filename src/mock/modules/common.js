@@ -4,7 +4,7 @@ import Mock from 'mockjs'
 export function login () {
   return {
     // isOpen: false,
-    url: '/sys/login',
+    url: '/auth/login',
     type: 'post',
     data: {
       'msg': 'success',
@@ -19,7 +19,7 @@ export function login () {
 export function logout () {
   return {
     // isOpen: false,
-    url: '/sys/logout',
+    url: '/auth/logout',
     type: 'post',
     data: {
       'msg': 'success',

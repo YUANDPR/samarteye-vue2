@@ -11,7 +11,7 @@
         </el-form-item>
 
         <el-form-item label="检索">
-          <el-input style="width:160px" v-model="dataForm.key" clearable></el-input>
+          <el-input v-model="dataForm.key" clearable style="width:160px"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="searchSkuInfo">查询</el-button>
@@ -19,105 +19,108 @@
       </el-form>
     </el-form>
     <el-table
+      v-loading="dataListLoading"
       :data="dataList"
       border
-      v-loading="dataListLoading"
-      @selection-change="selectionChangeHandle"
       style="width: 100%;"
+      @selection-change="selectionChangeHandle"
       @expand-change="getSkuDetails"
     >
       <el-table-column type="expand">
         <template slot-scope="scope">
-          图片：<img :src="scope.row.onematerialImage" style="width:80px;height:80px;" />
-          <br />
+          图片：<img :src="scope.row.onematerialImage" style="width:80px;height:80px;"/>
+          <br/>
           描述：{{scope.row.materialDescription}}
-          <br />
+          <br/>
           重量：{{scope.row.weight}}
-          <br />
+          <br/>
           分区ID：{{scope.row.wlId}}
-          <br />
+          <br/>
           所属货物ID：{{scope.row.materialId}}
-          <br />
+          <br/>
           供用商ID：{{scope.row.supplierId}}
-          <br />
+          <br/>
           货物种类ID：{{scope.row.materialTypeId}}
-          <br />
+          <br/>
           权限等级：{{scope.row.levelNumb}}
-          <br />
+          <br/>
         </template>
       </el-table-column>
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="onematerialId" header-align="center" align="center" label="onematerialId"></el-table-column>
-      <el-table-column prop="shelfName" header-align="center" align="center" label="货架"></el-table-column>
-      <el-table-column prop="valueSelect" header-align="center" align="center" label="货物名称"></el-table-column>
-   <!--   <el-table-column prop="onematerialImage" header-align="center" align="center" label="图片">
-        <template slot-scope="scope">
-          <img :src="scope.row.onematerialImage" style="width:80px;height:80px;" />
-        </template>
-      </el-table-column>  -->
-      <el-table-column prop="qualityPeriod" header-align="center" align="center" label="保质期" ></el-table-column>
-      <el-table-column prop="onematerialCount" header-align="center" align="center" label="数量"></el-table-column>
-      <el-table-column prop="publishStatus" header-align="center" align="center" label="上架状态">
+      <el-table-column align="center" header-align="center" type="selection" width="50"></el-table-column>
+      <el-table-column align="center" header-align="center" label="onematerialId"
+                       prop="onematerialId"></el-table-column>
+      <el-table-column align="center" header-align="center" label="货架" prop="shelfName"></el-table-column>
+      <el-table-column align="center" header-align="center" label="货物名称" prop="valueSelect"></el-table-column>
+      <!--   <el-table-column prop="onematerialImage" header-align="center" align="center" label="图片">
+           <template slot-scope="scope">
+             <img :src="scope.row.onematerialImage" style="width:80px;height:80px;" />
+           </template>
+         </el-table-column>  -->
+      <el-table-column align="center" header-align="center" label="保质期" prop="qualityPeriod"></el-table-column>
+      <el-table-column align="center" header-align="center" label="数量" prop="onematerialCount"></el-table-column>
+      <el-table-column align="center" header-align="center" label="上架状态" prop="publishStatus">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.publishStatus == 0">新建</el-tag>
           <el-tag v-if="scope.row.publishStatus == 1">已上架</el-tag>
           <el-tag v-if="scope.row.publishStatus == 2">已下架</el-tag>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
+      <el-table-column align="center" fixed="right" header-align="center" label="操作" width="150">
         <template slot-scope="scope">
-           <el-button
+          <el-button
             v-if="scope.row.publishStatus == 0"
-            type="text"
             size="small"
+            type="text"
             @click="onematerialUp(scope.row.onematerialId)"
-          >上架</el-button>
-    <!--      <el-button type="text" size="small" @click="previewHandle(scope.row.onematerialId)">预览</el-button>
-          <el-button type="text" size="small" @click="commentHandle(scope.row.onematerialId)">评论</el-button>  -->
+          >上架
+          </el-button>
+          <!--      <el-button type="text" size="small" @click="previewHandle(scope.row.onematerialId)">预览</el-button>
+                <el-button type="text" size="small" @click="commentHandle(scope.row.onematerialId)">评论</el-button>  -->
           <el-dropdown
-            @command="handleCommand(scope.row,$event)"
             size="small"
             split-button
             type="text"
+            @command="handleCommand(scope.row,$event)"
           >
             更多
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="materialSettings">库存管理</el-dropdown-item>
               <el-dropdown-item command="levelNumbSettings">叫料权限</el-dropdown-item>
               <el-dropdown-item command="uploadImages">上传图片</el-dropdown-item>
-             <!--    <el-dropdown-item command="seckillSettings">参与秒杀</el-dropdown-item>
-              <el-dropdown-item command="reductionSettings">满减设置</el-dropdown-item>
-              <el-dropdown-item command="discountSettings">折扣设置</el-dropdown-item>
-              <el-dropdown-item command="memberqualityPeriodSettings">会员价格</el-dropdown-item>
-              <el-dropdown-item command="materialSettings">库存管理</el-dropdown-item>
-              <el-dropdown-item command="couponSettings">优惠劵</el-dropdown-item>  -->
+              <!--    <el-dropdown-item command="seckillSettings">参与秒杀</el-dropdown-item>
+               <el-dropdown-item command="reductionSettings">满减设置</el-dropdown-item>
+               <el-dropdown-item command="discountSettings">折扣设置</el-dropdown-item>
+               <el-dropdown-item command="memberqualityPeriodSettings">会员价格</el-dropdown-item>
+               <el-dropdown-item command="materialSettings">库存管理</el-dropdown-item>
+               <el-dropdown-item command="couponSettings">优惠劵</el-dropdown-item>  -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
       :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
       :page-size="pageSize"
+      :page-sizes="[10, 20, 50, 100]"
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper"
+      @size-change="sizeChangeHandle"
+      @current-change="currentChangeHandle"
     ></el-pagination>
   </div>
 </template>
 
 <script>
-import CategoryCascader from "../common/material/category-cascader";
-import BrandSelect from "../common/material/supplier-select";
+import CategoryCascader from '../common/material/category-cascader'
+import BrandSelect from '../common/material/supplier-select'
+
 export default {
-  data() {
+  data () {
     return {
       catPathSub: null,
       supplierIdSub: null,
       dataForm: {
-        key: "",
+        key: '',
         supplierId: 0,
         wlId: 0,
         qualityPeriod: {
@@ -133,55 +136,55 @@ export default {
       dataListSelections: [],
       addOrUpdateVisible: false,
       warelocationPath: []
-    };
+    }
   },
   components: {
     CategoryCascader,
     BrandSelect
   },
-  activated() {
-    this.getDataList();
+  activated () {
+    this.getDataList()
   },
   methods: {
-     onematerialUp(onematerialId) {
+    onematerialUp (onematerialId) {
       this.$http({
-        url: this.$http.adornUrl("/material/onematerial/" + onematerialId + "/up"),
-        method: "post"
-      }).then(({ data }) => {
+        url: this.$http.adornUrl('/material/onematerial/' + onematerialId + '/up'),
+        method: 'post'
+      }).then(({data}) => {
         if (data && data.code === 0) {
           this.$message({
-            message: "上架成功",
-            type: "success",
+            message: '上架成功',
+            type: 'success',
             duration: 1500,
             onClose: () => {
-              this.getDataList();
+              this.getDataList()
             }
-          });
+          })
         } else {
-          this.$message.error(data.msg);
+          this.$message.error(data.msg)
         }
-      });
+      })
     },
-    getSkuDetails(row, expand) {
+    getSkuDetails (row, expand) {
       //sku详情查询
-      console.log("展开某行...", row, expand);
+      console.log('展开某行...', row, expand)
     },
     //处理更多指令
-    handleCommand(row, command) {
-      console.log("~~~~~", row, command);
-      if ("materialSettings" == command) {
-        this.$router.push({ path: "/ware-sku", query: { onematerialId: row.onematerialId } });
+    handleCommand (row, command) {
+      console.log('~~~~~', row, command)
+      if ('materialSettings' == command) {
+        this.$router.push({path: '/ware-sku', query: {onematerialId: row.onematerialId}})
       }
     },
-    searchSkuInfo() {
-      this.getDataList();
+    searchSkuInfo () {
+      this.getDataList()
     },
     // 获取数据列表
-    getDataList() {
-      this.dataListLoading = true;
+    getDataList () {
+      this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl("/material/onematerial/list"),
-        method: "get",
+        url: this.$http.adornUrl('/material/onematerial/list'),
+        method: 'get',
         params: this.$http.adornParams({
           page: this.pageIndex,
           limit: this.pageSize,
@@ -189,44 +192,44 @@ export default {
           wlId: this.dataForm.wlId,
           supplierId: this.dataForm.supplierId,
         })
-      }).then(({ data }) => {
+      }).then(({data}) => {
         if (data && data.code === 0) {
-          this.dataList = data.page.list;
-          this.totalPage = data.page.totalCount;
+          this.dataList = data.page.list
+          this.totalPage = data.page.totalCount
         } else {
-          this.dataList = [];
-          this.totalPage = 0;
+          this.dataList = []
+          this.totalPage = 0
         }
-        this.dataListLoading = false;
-      });
+        this.dataListLoading = false
+      })
     },
     // 每页数
-    sizeChangeHandle(val) {
-      this.pageSize = val;
-      this.pageIndex = 1;
-      this.getDataList();
+    sizeChangeHandle (val) {
+      this.pageSize = val
+      this.pageIndex = 1
+      this.getDataList()
     },
     // 当前页
-    currentChangeHandle(val) {
-      this.pageIndex = val;
-      this.getDataList();
+    currentChangeHandle (val) {
+      this.pageIndex = val
+      this.getDataList()
     },
     // 多选
-    selectionChangeHandle(val) {
-      this.dataListSelections = val;
+    selectionChangeHandle (val) {
+      this.dataListSelections = val
     }
   },
-  mounted() {
-    this.catPathSub = PubSub.subscribe("catPath", (msg, val) => {
-      this.dataForm.wlId = val[val.length - 1];
-    });
-    this.supplierIdSub = PubSub.subscribe("supplierId", (msg, val) => {
-      this.dataForm.supplierId = val;
-    });
+  mounted () {
+    this.catPathSub = PubSub.subscribe('catPath', (msg, val) => {
+      this.dataForm.wlId = val[val.length - 1]
+    })
+    this.supplierIdSub = PubSub.subscribe('supplierId', (msg, val) => {
+      this.dataForm.supplierId = val
+    })
   },
-  beforeDestroy() {
-    PubSub.unsubscribe(this.catPathSub);
-    PubSub.unsubscribe(this.supplierIdSub);
+  beforeDestroy () {
+    PubSub.unsubscribe(this.catPathSub)
+    PubSub.unsubscribe(this.supplierIdSub)
   } //生命周期 - 销毁之前
-};
+}
 </script>
