@@ -7,15 +7,16 @@
       :closable="true"
       @tab-click="selectedTabHandle"
       @tab-remove="removeTabHandle">
-      <el-dropdown :show-timeout="0" class="site-tabs__tools">
-        <i class="el-icon-arrow-down el-icon--right"></i>
-        <el-dropdown-menu slot="dropdown">
+      <el-dropdown :show-timeout="0" class="site-tabs__tools" trigger="click">
+        <i class="el-dropdown-link el-icon-arrow-down el-icon--right custom-vertical-spacing"></i>
+        <el-dropdown-menu slot="dropdown" class="dropdown-trigger">
           <el-dropdown-item @click.native="tabsCloseCurrentHandle">关闭当前标签页</el-dropdown-item>
           <el-dropdown-item @click.native="tabsCloseOtherHandle">关闭其它标签页</el-dropdown-item>
           <el-dropdown-item @click.native="tabsCloseAllHandle">关闭全部标签页</el-dropdown-item>
           <el-dropdown-item @click.native="refresh()">刷新当前标签页</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+
       <el-tab-pane
         v-for="item in mainTabs"
         :key="item.name"
@@ -138,4 +139,20 @@ export default {
   }
 }
 </script>
-
+<style scoped>
+.site-tabs__tools:hover {
+  background-color: #17b3a3 !important; /* 你可以根据需要调整颜色 */
+  cursor: pointer; /* 可选：改变鼠标悬停时的光标样式 */
+}
+.custom-vertical-spacing {
+  display: flex;
+  width: 40px !important;
+  height: 40px !important;
+}
+.el-icon-arrow-down{
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center;    /* 垂直居中 */
+  height: 100%;
+}
+</style>
