@@ -79,7 +79,6 @@ export default {
   methods: {
     // 获取货架
     getshelf () {
-
       if (this.firstask == this.warelocationPath[2]) {
         return
       }

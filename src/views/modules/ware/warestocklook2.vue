@@ -238,8 +238,8 @@ export default {
 
     },
     //关闭弹窗前的方法
-    handleClose (done) {
-
+    handleClose () {
+      this.dialogVisible = false
     },
 
     // 获取数据列表
