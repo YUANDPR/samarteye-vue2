@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-col :span="6">
-      <el-card class="backgroud">
+      <el-card class="background">
         <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
 
           <el-form-item label="选择分区">
@@ -24,7 +24,7 @@
     </el-col>
 
     <el-col :span="18">
-      <el-card class="backgroud">
+      <el-card class="background">
         <el-col v-for="item in dataList" :key="item.valueSelect" v-model="dataForm.valueSelect" :span="8"
                 class="shelfdata-group">
           <el-button class="shelfdata" type="success">
@@ -148,7 +148,7 @@ export default {
   font-size: 16px;
 }
 
-.backgroud {
+.background {
   background-color: rgb(183, 219, 240);
   height: 800px;
 }

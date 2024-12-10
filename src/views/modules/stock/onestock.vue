@@ -54,31 +54,24 @@
       <el-table-column align="center" header-align="center" label="onestockId" prop="onestockId"></el-table-column>
       <el-table-column align="center" header-align="center" label="货架" prop="shelfName"></el-table-column>
       <el-table-column align="center" header-align="center" label="货物名称" prop="valueSelect"></el-table-column>
-      <!--   <el-table-column prop="onestockImage" header-align="center" align="center" label="图片">
-           <template slot-scope="scope">
-             <img :src="scope.row.onestockImage" style="width:80px;height:80px;" />
-           </template>
-         </el-table-column>  -->
       <el-table-column align="center" header-align="center" label="保质期" prop="qualityPeriod"></el-table-column>
       <el-table-column align="center" header-align="center" label="数量" prop="onestockCount"></el-table-column>
       <el-table-column align="center" header-align="center" label="上架状态" prop="publishStatus">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.publishStatus == 0">新入库</el-tag>
-          <el-tag v-if="scope.row.publishStatus == 1">已上架</el-tag>
-          <el-tag v-if="scope.row.publishStatus == 2">已下架</el-tag>
+          <el-tag v-if="scope.row.publishStatus === 0">新入库</el-tag>
+          <el-tag v-if="scope.row.publishStatus === 1">已上架</el-tag>
+          <el-tag v-if="scope.row.publishStatus === 2">已下架</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" fixed="right" header-align="center" label="操作" width="150">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.publishStatus == 0"
+            v-if="scope.row.publishStatus === 0"
             size="small"
             type="text"
             @click="onestockUp(scope.row.onestockId)"
           >上架
           </el-button>
-          <!--      <el-button type="text" size="small" @click="previewHandle(scope.row.onestockId)">预览</el-button>
-                <el-button type="text" size="small" @click="commentHandle(scope.row.onestockId)">评论</el-button>  -->
           <el-dropdown
             size="small"
             split-button
@@ -90,12 +83,6 @@
               <el-dropdown-item command="stockSettings">库存管理</el-dropdown-item>
               <el-dropdown-item command="levelNumbSettings">叫料权限</el-dropdown-item>
               <el-dropdown-item command="uploadImages">上传图片</el-dropdown-item>
-              <!--    <el-dropdown-item command="seckillSettings">参与秒杀</el-dropdown-item>
-               <el-dropdown-item command="reductionSettings">满减设置</el-dropdown-item>
-               <el-dropdown-item command="discountSettings">折扣设置</el-dropdown-item>
-               <el-dropdown-item command="memberqualityPeriodSettings">会员价格</el-dropdown-item>
-               <el-dropdown-item command="stockSettings">库存管理</el-dropdown-item>
-               <el-dropdown-item command="couponSettings">优惠劵</el-dropdown-item>  -->
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -116,6 +103,7 @@
 <script>
 import CategoryCascader from '../common/category-cascader'
 import BrandSelect from '../common/supplier-select'
+import PubSub from 'pubsub-js'
 
 export default {
   data () {
@@ -128,7 +116,7 @@ export default {
         wlId: undefined,
         qualityPeriod: {
           min: undefined,
-          max: undefined,
+          max: undefined
         }
       },
       dataList: [],
@@ -169,13 +157,13 @@ export default {
       })
     },
     getSkuDetails (row, expand) {
-      //sku详情查询
+      // sku详情查询
       console.log('展开某行...', row, expand)
     },
-    //处理更多指令
+    // 处理更多指令
     handleCommand (row, command) {
       console.log('~~~~~', row, command)
-      if ('stockSettings' == command) {
+      if (command === 'stockSettings') {
         this.$router.push({path: '/ware-sku', query: {onestockId: row.onestockId}})
       }
     },
@@ -235,6 +223,7 @@ export default {
   beforeDestroy () {
     PubSub.unsubscribe(this.catPathSub)
     PubSub.unsubscribe(this.supplierIdSub)
-  } //生命周期 - 销毁之前
+    // eslint-disable-next-line no-irregular-whitespace
+  } // 生命周期 - 销毁之前
 }
 </script>

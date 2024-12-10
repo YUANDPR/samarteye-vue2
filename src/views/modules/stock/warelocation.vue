@@ -1,7 +1,7 @@
 <template>
   <div class="a1">
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :span="5">
         <!--  <el-switch v-model="draggable" active-text="开启拖拽" inactive-text="关闭拖拽"></el-switch> -->
         <el-button v-if="draggable" @click="batchSave">批量保存</el-button>
         <el-button type="danger" @click="batchDelete">批量删除</el-button>
@@ -16,25 +16,30 @@
           node-key="wlId"
           show-checkbox
           @node-drop="handleDrop"
+          class="elment-parent"
         >
-      <span slot-scope="{ node, data }" class="custom-tree-node">
-        <span>{{ node.label }}</span>
-        <span>
-          <el-button
-            v-if="node.level <=2"
-            size="mini"
-            type="text"
-            @click="() => append(data)"
-          >添加</el-button>
-          <el-button size="mini" type="text" @click="edit(data)">修改</el-button>
-          <el-button
-            v-if="node.childNodes.length==0"
-            size="mini"
-            type="text"
-            @click="() => remove(node, data)"
-          >删除</el-button>
-        </span>
-      </span>
+          <span slot-scope="{ node, data }" >
+            <span>{{ node.label }}</span>
+            <span class="child">
+              <el-button
+                v-if="node.level <=2"
+                size="mini"
+                type="text"
+                @click="() => append(data)"
+              >添加</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                @click="edit(data)"
+              >修改</el-button>
+              <el-button
+                v-if="node.childNodes.length==0"
+                size="mini"
+                type="text"
+                @click="() => remove(node, data)"
+              >删除</el-button>
+            </span>
+          </span>
         </el-tree>
 
         <el-dialog
@@ -60,7 +65,7 @@
       </span>
         </el-dialog>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="19">
         <div id="chart1" class="chart-box"></div>
       </el-col>
 
@@ -542,6 +547,12 @@ export default {
     }
   }
 }
-
+.elment-parent {
+  white-space: nowrap;
+}
+.child {
+  display: inline-block;
+  /* 添加其他样式，如宽度、高度、边距等 */
+}
 
 </style>
