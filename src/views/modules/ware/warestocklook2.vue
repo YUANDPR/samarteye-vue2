@@ -14,12 +14,7 @@
         </el-select>
 
 
-        <!--  <el-input v-model="dataForm.shelfName" placeholder="货架" clearable></el-input> -->
         <el-col :span="12" class="shelf-group">
-
-          <!--     <el-button @click="getshelf(item.wlId)" class="button1" type="info">
-                 {{ item.name }}
-                 </el-button> -->
           <el-tabs tab-position="left" @tab-click="handleClick">
             <el-tab-pane
               v-for="item in dataList"
@@ -48,7 +43,7 @@
           <el-button class="shelfdata" type="success" @click="getupshelfinfo(item.shelfName)">
             {{ item.shelfName }}
           </el-button>
-          <el-progress :percentage="item.count*5" :stroke-width="20" :text-inside="true"></el-progress>
+          <el-progress style="min-width: 300px;" class="custom-progress" :percentage="item.count" :stroke-width="20" :text-inside="true"></el-progress>
 
         </el-col>
         <el-dialog
@@ -302,5 +297,11 @@ export default {
 
 .card1 {
   background-color: rgb(110, 231, 225);
+}
+</style>
+
+<style scoped>
+.custom-progress >>> .el-progress-bar__innerText {
+  color: #000000;
 }
 </style>

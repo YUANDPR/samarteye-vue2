@@ -60,9 +60,9 @@
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitData">确 定</el-button>
-      </span>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitData">确 定</el-button>
+          </span>
         </el-dialog>
       </el-col>
       <el-col :span="19" style="padding: 0; border: 2px solid #17b3a3">

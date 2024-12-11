@@ -1,7 +1,7 @@
 <template>
   <div class="a1">
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :span="5">
         <!--   <el-switch v-model="draggable" active-text="开启拖拽" inactive-text="关闭拖拽"></el-switch> -->
         <el-button v-if="draggable" @click="batchSave">批量保存</el-button>
         <el-button type="danger" @click="batchDelete">批量删除</el-button>
@@ -55,13 +55,13 @@
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitData">确 定</el-button>
-      </span>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitData">确 定</el-button>
+          </span>
         </el-dialog>
       </el-col>
 
-      <el-col :span="20">
+      <el-col :span="19" style="padding: 0; border: 2px solid #17b3a3">
         <div id="chart1" class="chart-box"></div>
       </el-col>
     </el-row>
